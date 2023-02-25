@@ -42,9 +42,8 @@ router.get("/search", async (req, res) => {
 router.get("/tag", async (req, res) => {
   const query = req.query.tagname;
   const q = query.split(" ");
-  console.log(q);
   try {
-    const image = await Image.find({ tags: { $all: q } });
+    const image = await Image.find({ tags: { $all: q } }).populate("userId");
     // image.map((e) => {
     //   if (e.tags.includes(query)) {
     //     tagImg.push(e);
@@ -55,4 +54,15 @@ router.get("/tag", async (req, res) => {
     res.send(error);
   }
 });
+
+router.get("/:userId", async (req, res) => {
+  const user = req.params.userId;
+  try {
+    const image = await Image.find({ userId: user }).populate("userId");
+    res.send(image);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 module.exports = router;

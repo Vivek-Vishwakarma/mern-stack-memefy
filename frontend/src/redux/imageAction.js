@@ -41,3 +41,30 @@ export const imageSearch = createAsyncThunk(
     }
   }
 );
+export const searchTag = createAsyncThunk(
+  "image/searchTag",
+  async (tag, { rejectWithValue }) => {
+    try {
+      // configure header's Content-Type as JSON
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.get(
+        `${backendURL}/image/tag?tagname=${tag}`,
+        config
+      );
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      // return custom error message from API if any
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.msg);
+      }
+    }
+  }
+);
