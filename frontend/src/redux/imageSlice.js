@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllImage } from "./imageAction";
+import { fetchAllImage, imageSearch } from "./imageAction";
 
 let initialState = {
   loading: false,
@@ -23,6 +23,20 @@ export const imageSlice = createSlice({
       state.img = payload;
     },
     [fetchAllImage.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      state.success = false;
+    },
+    [imageSearch.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [imageSearch.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.img = payload;
+    },
+    [imageSearch.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
       state.success = false;

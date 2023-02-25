@@ -47,7 +47,7 @@ router.post("/login", async (req, res) => {
     const userPassword = req.body.password;
     if (!email || !userPassword)
       return res.status(400).json({ msg: "Not all fields have been entered." });
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email }).select("+password");
     if (!user)
       return res
         .status(400)
@@ -61,7 +61,7 @@ router.post("/login", async (req, res) => {
       user: others,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).send(err.message);
   }
 });
 module.exports = router;

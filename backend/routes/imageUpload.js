@@ -22,7 +22,7 @@ router.post("/upload", auth, async (req, res) => {
 });
 router.get("/", async (req, res) => {
   try {
-    const images = await Image.find({});
+    const images = await Image.find({}).populate("userId");
     res.send(images);
   } catch (error) {
     res.send(error);
@@ -33,7 +33,7 @@ router.get("/search", async (req, res) => {
   try {
     const image = await Image.find({
       name: { $regex: query, $options: "i" },
-    });
+    }).populate("userId");
     res.send(image);
   } catch (error) {
     res.send(error);

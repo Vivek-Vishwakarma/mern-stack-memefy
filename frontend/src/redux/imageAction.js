@@ -14,3 +14,30 @@ export const fetchAllImage = createAsyncThunk(
     }
   }
 );
+export const imageSearch = createAsyncThunk(
+  "image/imageSearch",
+  async (input, { rejectWithValue }) => {
+    try {
+      // configure header's Content-Type as JSON
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.get(
+        `${backendURL}/image/search?q=${input}`,
+        config
+      );
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      // return custom error message from API if any
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.msg);
+      }
+    }
+  }
+);
