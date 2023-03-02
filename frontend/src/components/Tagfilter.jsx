@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 
 export default function TagFilter() {
   const dispatch = useDispatch();
-  const tags = ["Tech", "English", "Student", "PC"];
+  const tags = ["Tech", "English", "Student", "PC", "Reddit", "Sarcasm"];
   const [tag, setTag] = React.useState("");
 
   const handleChange = (event) => {
@@ -19,16 +19,18 @@ export default function TagFilter() {
 
   return (
     <Box sx={{ minWidth: 150 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth size="small">
         <InputLabel id="demo-simple-select-label">Tag</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          size="small"
           value={tag}
           label="Tag"
           onChange={handleChange}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {tags.map((e) => {
             return (
               <MenuItem key={e} value={e}>

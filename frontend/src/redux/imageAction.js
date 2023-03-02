@@ -68,3 +68,32 @@ export const searchTag = createAsyncThunk(
     }
   }
 );
+export const uploadImg = createAsyncThunk(
+  "image/uploadImg",
+  async ({ name, tags, imageUrl }, { rejectWithValue }) => {
+    try {
+      // configure header's Content-Type as JSON
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": localStorage.getItem("userToken"),
+        },
+      };
+      const { data } = await axios.post(
+        `${backendURL}/image/upload`,
+        { name, tags, imageUrl },
+        config
+      );
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      // return custom error message from API if any
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.msg);
+      }
+    }
+  }
+);

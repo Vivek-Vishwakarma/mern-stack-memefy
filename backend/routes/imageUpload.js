@@ -41,9 +41,11 @@ router.get("/search", async (req, res) => {
 });
 router.get("/tag", async (req, res) => {
   const query = req.query.tagname;
-  const q = query.split(" ");
+  const q = query.split(",");
   try {
-    const image = await Image.find({ tags: { $all: q } }).populate("userId");
+    const image = await Image.find({
+      tags: { $all: q.map((tag) => new RegExp(tag, "i")) },
+    }).populate("userId");
     // image.map((e) => {
     //   if (e.tags.includes(query)) {
     //     tagImg.push(e);
