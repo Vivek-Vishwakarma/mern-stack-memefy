@@ -6,7 +6,6 @@ export const userLogin = createAsyncThunk(
   "user/login",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      // configure header's Content-Type as JSON
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -19,7 +18,7 @@ export const userLogin = createAsyncThunk(
       );
       console.log(data);
       // store user's token in local storage
-      localStorage.setItem("userToken", data.token);
+      localStorage.setItem("userToken", JSON.stringify(data));
       return data;
     } catch (error) {
       console.log(error);

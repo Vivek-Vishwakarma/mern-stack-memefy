@@ -14,8 +14,9 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { reset } from "../redux/userSlice";
 
 const pages = [
   { name: "Home", path: "/" },
@@ -23,6 +24,7 @@ const pages = [
 ];
 
 function Nav() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const settings = [
     {
@@ -34,6 +36,7 @@ function Nav() {
     {
       name: "Logout",
       action: () => {
+        dispatch(reset());
         localStorage.removeItem("userToken");
         navigate("/login");
         console.log("removed");
@@ -43,12 +46,7 @@ function Nav() {
   const { loading, userInfo, error, success } = useSelector(
     (state) => state.user
   );
-  let userData = userInfo;
-  useEffect(() => {
-    if (localStorage.getItem("userToken")) {
-      userData = localStorage.getItem("userToken");
-    }
-  }, []);
+  const userData = JSON.parse(localStorage.getItem("userToken"));
 
   const log = localStorage.getItem("userToken");
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -166,7 +164,7 @@ function Nav() {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="test" src={userData.image} />
+                  <Avatar alt="test" src={userData.user.image} />
                 </IconButton>
               </Tooltip>
               <Menu

@@ -49,7 +49,7 @@ export default function MyCard({ e }) {
               <Chip
                 sx={{ marginRight: 1, fontWeight: "bold" }}
                 key={ele}
-                label={ele}
+                label={capitalizeFirstLetter(ele)}
                 color="success"
                 size="small"
                 variant="filled"

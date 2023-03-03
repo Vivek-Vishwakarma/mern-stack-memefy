@@ -26,24 +26,26 @@ export default function Login() {
   const { loading, userInfo, error, success } = useSelector(
     (state) => state.user
   );
-  const dispatch = useDispatch();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(data);
-    dispatch(userLogin(data));
-    if (!success) {
-      return setOpen(true);
-    }
-  };
-
-  const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
   useEffect(() => {
     if (success) {
       navigate("/");
     }
   }, [success]);
+
+  const dispatch = useDispatch();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(userLogin(data)).then(() => {
+      if (!success) {
+        setOpen(true);
+        return;
+      }
+    });
+  };
+
+  const handleChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   return (
     <ThemeProvider theme={theme}>

@@ -72,11 +72,12 @@ export const uploadImg = createAsyncThunk(
   "image/uploadImg",
   async ({ name, tags, imageUrl }, { rejectWithValue }) => {
     try {
-      // configure header's Content-Type as JSON
+      const userToken = JSON.parse(localStorage.getItem("userToken"));
+      console.log(userToken);
       const config = {
         headers: {
           "Content-Type": "application/json",
-          "x-auth-token": localStorage.getItem("userToken"),
+          "x-auth-token": userToken.token,
         },
       };
       const { data } = await axios.post(

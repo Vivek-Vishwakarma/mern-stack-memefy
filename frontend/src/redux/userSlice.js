@@ -15,7 +15,23 @@ let initialState = {
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.loading = false;
+      state.userInfo = {};
+      state.userToken = null;
+      state.error = null;
+      state.success = false;
+    },
+    setUserFromLocal: (state, action) => {
+      // console.log(action.payload);
+      state.loading = false;
+      state.userInfo = action.payload.user;
+      state.userToken = action.payload.token;
+      state.error = null;
+      state.success = true;
+    },
+  },
   extraReducers: {
     // login user
     [userLogin.pending]: (state) => {
@@ -51,6 +67,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const {} = userSlice.actions;
+export const { reset, setUserFromLocal } = userSlice.actions;
 
 export default userSlice.reducer;
