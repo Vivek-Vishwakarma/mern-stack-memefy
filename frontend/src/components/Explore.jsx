@@ -1,20 +1,24 @@
 import { Container } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllImage } from "../redux/imageAction";
+import { allFilter, fetchAllImage } from "../redux/imageAction";
 import MyCard from "./MyCard";
 import Loading from "./Loading";
+
 import FIlters from "./FIlters";
 const Explore = () => {
-  const { loading, img, error, success } = useSelector((state) => state.image);
+  const { loading, img, error, success, totalPages } = useSelector(
+    (state) => state.image
+  );
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAllImage());
+    dispatch(allFilter({ name: "", tags: "", page: 1 }));
   }, []);
 
   return (
     <>
-      <FIlters />
+      <FIlters totalPages={totalPages} />
+
       {loading ? (
         <Loading />
       ) : (
@@ -25,6 +29,7 @@ const Explore = () => {
             flexWrap: "wrap",
             justifyContent: "space-evenly",
             gap: 4,
+            marginBlock: 5,
           }}
         >
           {img &&

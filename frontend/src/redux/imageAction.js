@@ -5,9 +5,9 @@ const backendURL = "http://localhost:5000";
 // First, create the thunk
 export const fetchAllImage = createAsyncThunk(
   "image/fetchAllImage",
-  async () => {
+  async (page) => {
     try {
-      const response = await axios.get(`${backendURL}/image/`);
+      const response = await axios.get(`${backendURL}/image/?page=${page}`);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -16,16 +16,17 @@ export const fetchAllImage = createAsyncThunk(
 );
 export const imageSearch = createAsyncThunk(
   "image/imageSearch",
-  async (input, { rejectWithValue }) => {
+  async ({ input, page }, { rejectWithValue }) => {
     try {
       // configure header's Content-Type as JSON
+      console.log(input, page);
       const config = {
         headers: {
           "Content-Type": "application/json",
         },
       };
       const { data } = await axios.get(
-        `${backendURL}/image/search?q=${input}`,
+        `${backendURL}/image/search?q=${input}&page=${page}`,
         config
       );
       console.log(data);
@@ -83,6 +84,34 @@ export const uploadImg = createAsyncThunk(
       const { data } = await axios.post(
         `${backendURL}/image/upload`,
         { name, tags, imageUrl },
+        config
+      );
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      // return custom error message from API if any
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.msg);
+      }
+    }
+  }
+);
+
+export const allFilter = createAsyncThunk(
+  "image/allFilter",
+  async ({ name, tags, page }, { rejectWithValue }) => {
+    try {
+      // configure header's Content-Type as JSON
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.get(
+        `${backendURL}/image/all?page=${page}&name=${name}&tags=${tags}`,
         config
       );
       console.log(data);

@@ -1,15 +1,36 @@
 import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { fetchAllImage, imageSearch } from "../redux/imageAction";
+import { allFilter, fetchAllImage, imageSearch } from "../redux/imageAction";
 import { useDispatch } from "react-redux";
 import TagFilter from "./Tagfilter";
-const FIlters = () => {
-  const [input, setInput] = useState("");
+import Pagination from "@mui/material/Pagination";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+const FIlters = ({ totalPages }) => {
+  const tags = ["Tech", "English", "Student", "PC", "Reddit", "Sarcasm"];
+  const [tag, setTag] = React.useState("");
+  const [name, setName] = React.useState("");
+
+  const [page, setPage] = useState(1);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    dispatch(allFilter({ name: name, tags: tag, page: newPage }));
+  };
+  const [input, setInput] = useState({
+    name: name,
+    tags: tag,
+    page: page,
+  });
+
   const dispatch = useDispatch();
   const search = (e) => {
     e.preventDefault();
-    dispatch(imageSearch(input));
+    console.log(input);
+    dispatch(allFilter(input));
   };
   return (
     <>
@@ -33,10 +54,10 @@ const FIlters = () => {
             size="small"
             label="Search"
             onChange={(e) => {
-              setInput(e.target.value);
+              setName(e.target.value);
             }}
             required
-            value={input}
+            value={name}
             sx={{ width: "80%" }}
             variant="outlined"
           />
@@ -66,14 +87,50 @@ const FIlters = () => {
             size="small"
             color="error"
             onClick={() => {
-              setInput("");
-              dispatch(fetchAllImage());
+              setName("");
+              setTag("");
+              setPage(1);
+              dispatch(allFilter({ name: "", tags: "", page: 1 }));
             }}
           >
             Reset
           </Button>
-          <TagFilter />
+          <Box sx={{ minWidth: 150 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel id="demo-simple-select-label">Tag</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={tag}
+                label="Tag"
+                onChange={(e) => {
+                  dispatch(
+                    allFilter({ name: "", tags: e.target.value, page: 1 })
+                  );
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {tags.map((e) => {
+                  return (
+                    <MenuItem key={e} value={e}>
+                      {e}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
         </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handleChangePage}
+          color="primary"
+        />
       </div>
     </>
   );

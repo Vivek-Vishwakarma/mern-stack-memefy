@@ -7,7 +7,6 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  boxShadow: 24,
   p: 4,
 };
 
@@ -23,7 +22,7 @@ export default function Mymodal({ open, setOpen, img }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <img src={img} />
+          <img src={img} style={{ height: "500px", width: "500px" }} />
         </Box>
       </Modal>
     </div>

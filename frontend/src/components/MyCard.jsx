@@ -25,7 +25,7 @@ export default function MyCard({ e }) {
 
   return (
     <>
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ width: 240 }}>
         <CardHeader
           avatar={<Avatar alt={e.userId.name} src={e.userId.image} />}
           title={capitalizeFirstLetter(e.userId.name)}

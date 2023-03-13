@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     if (localStorage.getItem("userToken")) {
       // console.log(localStorage.getItem("userToken"));
-      dispatch(setUserFromLocal(localStorage.getItem("userToken")));
+      dispatch(setUserFromLocal(JSON.parse(localStorage.getItem("userToken"))));
     } else {
       alert("Please login before accessing home page !!");
       navigate("/login");
